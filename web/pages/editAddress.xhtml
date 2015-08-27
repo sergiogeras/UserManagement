@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Сергей
+  Date: 24.08.2015
+  Time: 16:24
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>#{msg.editing_address}</title>
+    <h:outputStylesheet name="manager-style.css" library="css"/>
+</h:head>
+
+<h:body>
+    <div class="add_dialog">
+        <h:form>
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel for="zip" value="ZIP" />
+                <p:inputText id="zip" value="#{addressController.address.zip}">
+                </p:inputText>
+                <h:outputLabel for="country" value="#{msg.country}" />
+                <p:inputText id="country" value="#{addressController.address.country}">
+                </p:inputText>
+                <h:outputLabel for="city" value="#{msg.city}" />
+                <p:inputText id="city"  value="#{addressController.address.city}">
+                </p:inputText>
+                <h:outputLabel for="district" value="#{msg.district}" />
+                <p:inputText id="district"  value="#{addressController.address.district}">
+                </p:inputText>
+                <h:outputLabel for="street" value="#{msg.street}" />
+                <p:inputText id="street"  value="#{addressController.address.street}">
+                </p:inputText>
+            </h:panelGrid>
+
+            <p:commandButton styleClass="table_button" value="#{msg.save}"
+                             actionListener="#{addressController.editAddress}"/>
+        </h:form>
+    </div>
+
+</h:body>
+
+</html>

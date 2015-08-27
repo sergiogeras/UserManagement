@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Created by IntelliJ IDEA.
+  User: Сергей
+  Date: 11.08.2015
+  Time: 20:06
+-->
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>#{msg.adding_new_user}</title>
+    <h:outputStylesheet name="manager-style.css" library="css"/>
+</h:head>
+
+<h:body>
+    <div class="add_dialog">
+        <h:form>
+                <h:panelGrid id="panel" columns="3" cellpadding="5">
+
+                    <h:outputLabel for="firstName" value="#{msg.first_name}" />
+                    <p:inputText id="firstName" value="#{userController.user.firstName}" required="true">
+                        <f:validator validatorId="NameValidator"/>
+                        <f:ajax event="keyup" execute="firstName" render="firstNameError"/>
+                    </p:inputText>
+                    <h:message for="firstName" id="firstNameError" styleClass="error"/>
+
+                    <h:outputLabel for="lastName" value="#{msg.last_name}" />
+                    <p:inputText id="lastName"  value="#{userController.user.lastName}">
+                        <f:validator validatorId="NameValidator"/>
+                        <f:ajax event="keyup" execute="lastName" render="lastNameError"/>
+                    </p:inputText>
+                    <h:message for="lastName" id="lastNameError" styleClass="error"/>
+
+                    <h:outputLabel for="username" value="#{msg.username}" />
+                    <p:inputText id="username"  value="#{userController.user.username}" required="true">
+                        <f:validator validatorId="LengthValidator"/>
+                        <f:ajax event="keyup" execute="username" render="usernameError"/>
+                        <f:validator binding="#{usernameValidator}"/>
+                    </p:inputText>
+                    <h:message for="username" id="usernameError" styleClass="error"/>
+
+                    <h:outputLabel for="password" value="#{msg.password}" />
+                    <p:inputText id="password"  value="#{userController.user.password}" required="true">
+                        <f:validator validatorId="LengthValidator"/>
+                        <f:ajax event="keyup" execute="password" render="passwordError"/>
+                    </p:inputText>
+                    <h:message for="password" id="passwordError" styleClass="error"/>
+
+                    <h:outputLabel for="e-mail" value="E-mail" />
+                    <p:inputText id="e-mail" value="#{userController.user.email}">
+                    </p:inputText>
+                        <h:message for="e-mail" id="emailError" styleClass="error"/>
+
+                    <h:outputLabel for="birthday" value="#{msg.birthday}" />
+                    <p:calendar id="birthday" value="#{userController.user.birthday}" showOn="button" />
+                    <p:dialog  modal="true" resizable="false" header="Values" widgetVar="dlg" showEffect="fold">
+                        <h:outputText value="Button:" />
+                        <h:outputText value="#{userController.user.birthday}">
+                            <f:convertDateTime pattern="MM/dd/yyyy" />
+                        </h:outputText>
+                    </p:dialog>
+
+                    <p:outputLabel for="group" value="#{msg.groups}" />
+                    <p:selectOneMenu id="group" value="#{userController.groupType}" style="width:125px">
+                        <f:selectItem itemLabel="Manager" itemValue="1" />
+                        <f:selectItem itemLabel="Developer" itemValue="2" />
+                        <f:selectItem itemLabel="Tester" itemValue="3" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+            <p:commandButton styleClass="table_button" value="#{msg.save}" validateClient="true" update="panel"
+                             actionListener="#{userController.addUser}"/>
+        </h:form>
+    </div>
+
+</h:body>
+
+</html>

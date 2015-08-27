@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:security="http://www.springframework.org/security/tags">
+
+<h:head>
+    <title>#{msg.user_management}</title>
+    <h:outputScript name="jquery/jquery.js" library="primefaces"/>
+    <h:outputStylesheet library="css" name="manager-style.css"/>
+</h:head>
+
+<h:body>
+    <div class="container">
+        <div class="header">
+            <h:form id="group_tree">
+                <p:tree id="group_table"  value="#{groupController.root}" var="group" selectionMode="single"
+                        selection="#{userController.selectedNode}" style="margin-top:0">
+                    <p:ajax event="select" update="@([id$=user_table])" listener="#{userController.showUsersTable}" />
+                    <f:facet name="header">
+                        #{msg.user_management}
+                    </f:facet>
+                    <p:treeNode icon="ui-icon-person">
+                        <h:outputText value="#{group.role}"/>
+                    </p:treeNode>
+                </p:tree>
+            </h:form>
+            <h:form id="search_form">
+                <p:growl id="message" showDetail="false" escape="false"/>
+                <p:panelGrid columns="2" style="margin-bottom:10px border: none" cellpadding="5">
+                    <p:inputText id="search_input" required="true" value="#{userController.searchText}" style="width: 320px"/>
+                    <p:commandButton id="search_button"  styleClass="" value="#{msg.search}" icon="ui-icon-search"
+                                     actionListener="#{userController.searchUser}" action="#{userController.showUsersTable('')}"
+                                      update=":user_form:user_table">
+                    </p:commandButton>
+                    <p:selectOneRadio id="console" value="#{userController.searchType}">
+                        <f:selectItem itemLabel="#{msg.first_name}" itemValue="firstName" />
+                        <f:selectItem itemLabel="#{msg.last_name}" itemValue="lastName" />
+                        <f:selectItem itemLabel="E-mail" itemValue="email" />
+                        <f:selectItem itemLabel="#{msg.birthday}" itemValue="birthday" />
+                    </p:selectOneRadio>
+                    <p:commandButton  styleClass="" value="#{msg.reset}"
+                                      actionListener="#{userController.outOfSearchMode}" action="#{userController.showUsersTable('')}"
+                                      update=":user_form:user_table :search_form:message search_input">
+                    </p:commandButton>
+                </p:panelGrid>
+            </h:form>
+
+
+        </div>
+
+        <div class="content">
+            <h:form id="user_form">
+                <p:growl id="messages" showDetail="false" escape="false"/>
+
+                <p:dataTable id="user_table" var="user" value="#{userController.users}" selectionMode="single"
+                             selection="#{userController.selectedUser}" rowKey="#{user.id}" emptyMessage="#{msg.choose_group_of_users}">
+                    <f:facet name="header">
+                        #{msg.users}
+                    </f:facet>
+                    <p:ajax event="rowSelect"  update=":address_panel:pg" listener="#{userController.showAddressPanel}" />
+                    <p:ajax event="rowUnselect"  update="" />
+                    <p:column headerText="ID">
+                        <h:outputText value="#{user.id}" />
+                    </p:column>
+                    <p:column headerText="#{msg.first_name}">
+                        <h:outputText value="#{user.firstName}" />
+                    </p:column>
+                    <p:column headerText="#{msg.last_name}">
+                        <h:outputText value="#{user.lastName}" />
+                    </p:column>
+                    <p:column headerText="#{msg.username}">
+                        <h:outputText value="#{user.username}" />
+                    </p:column>
+                    <p:column headerText="#{msg.password}">
+                        <h:outputText value="#{user.password}" />
+                    </p:column>
+                    <p:column headerText="#{msg.email}">
+                        <h:outputText value="#{user.email}" />
+                    </p:column>
+                    <p:column headerText="#{msg.birthday}">
+                        <h:outputText value="#{user.birthday}">
+                            <f:convertDateTime pattern="dd.MM.yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{msg.is_active}">
+                        <h:outputText value="#{user.isActive}" />
+                    </p:column>
+                    <p:column headerText="#{msg.create_ts}">
+                        <h:outputText value="#{user.createTS}">
+                           <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{msg.last_update_ts}">
+                        <h:outputText value="#{user.lastUpdateTS}">
+                            <f:convertDateTime  pattern="HH:mm dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+
+
+                <p:commandButton styleClass="table_button" value="#{msg.new_user}"  icon="ui-icon-plus"
+                                 action="#{userController.addUserDialog}">
+                    <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('new')}" update=":user_form:user_table messages"/>
+                </p:commandButton>
+                <p:commandButton styleClass="table_button" value="#{msg.edit}"  icon="ui-icon-pencil"
+                                 action="#{userController.editUserDialog}">
+                    <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('update')}" update=":user_form:user_table messages"/>
+                </p:commandButton>
+                <h:form>
+                    <p:commandButton styleClass="table_button" value="#{msg.delete}" icon="ui-icon-trash"
+                                     actionListener="#{userController.deleteUser}" update="@([id$=messages]) :user_form:user_table" action="#{userController.showUsersTable('')}" >
+                        <p:confirm message="#{msg.delete}?" header="#{msg.confirmation}" icon="ui-icon-alert"/>
+
+                    </p:commandButton>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                        <p:commandButton value="#{msg.yes}" type="button" styleClass="ui-confirmdialog-yes"
+                                         icon="ui-icon-check">
+                        </p:commandButton>
+                        <p:commandButton value="#{msg.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                </h:form>
+
+            </h:form>
+
+            <h:form id="address_panel" >
+                <p:panelGrid id="pg" columns="2">
+                    <f:facet name="header">
+                        #{msg.address}
+                    </f:facet>
+
+
+                    <h:outputText value="ZIP" />
+                    <h:outputText value="#{addressController.address.zip}" style="width: 100px"/>
+                    <h:outputText value="#{msg.country}" />
+                    <h:outputText value="#{addressController.address.country}" />
+                    <h:outputText value="#{msg.city}" />
+                    <h:outputText value="#{addressController.address.city}" />
+                    <h:outputText value="#{msg.district}" />
+                    <h:outputText value="#{addressController.address.district}" />
+                    <h:outputText value="#{msg.street}" />
+                    <h:outputText value="#{addressController.address.street}" />
+
+
+                </p:panelGrid>
+                <p:commandButton styleClass="table_button" value="#{msg.edit}"  icon="ui-icon-pencil"
+                                 action="#{addressController.editAddressDialog}">
+                    <p:ajax event="dialogReturn" listener="#{userController.showAddressPanel}" update=":address_panel:pg"/>
+                </p:commandButton>
+            </h:form>
+        </div>
+
+    </div>
+</h:body>
+
+</html>

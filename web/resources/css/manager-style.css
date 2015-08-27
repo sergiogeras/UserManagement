@@ -1,0 +1,62 @@
+.container{
+    width: 1400px;
+    margin: auto;
+    font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+    color: black;
+    font-size: 13px;
+}
+
+.add_dialog {
+    margin: auto;
+    font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+    color: black;
+    font-size: 13px;
+}
+
+.table_button{
+
+    margin: 10px 0 10px 5px;
+
+    float: left;
+}
+
+#group_tree{
+    float: left;
+}
+
+.user_table{
+
+}
+
+#user_form{
+    width: 1150px;
+    float: left;
+}
+
+#address_panel{
+    float: right;
+}
+
+
+
+.header{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    height: 90px;
+}
+
+.table_button{
+
+    margin: 10px 0 10px 5px;
+
+    float: left;
+}
+#search_form{
+    margin-left: 310px;
+}
+
+.error{
+    color: red;
+    font-size: 10px;
+    font-style: italic;
+}
