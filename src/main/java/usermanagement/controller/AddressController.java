@@ -34,7 +34,7 @@ public class AddressController {
         props.put("resizable", false);
         props.put("contentWidth", 260);
         props.put("contentHeight", 255);
-        RequestContext.getCurrentInstance().openDialog("pages/editAddress", props, null);
+        RequestContext.getCurrentInstance().openDialog("editAddress", props, null);
     }
 
     public void editAddress(){

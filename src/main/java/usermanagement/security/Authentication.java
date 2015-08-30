@@ -10,10 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.IOException;
 
-/**
- * Created by Сергей on 25.08.2015.
- */
-@Deprecated
+
 @Component
 @Scope("request")
 public class Authentication {

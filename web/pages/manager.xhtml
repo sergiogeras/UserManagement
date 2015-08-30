@@ -18,7 +18,7 @@
         <div class="header">
             <h:form id="group_tree">
                 <p:tree id="group_table"  value="#{groupController.root}" var="group" selectionMode="single"
-                        selection="#{userController.selectedNode}" style="margin-top:0">
+                        selection="#{userController.selectedNode}" style="height: 75px">
                     <p:ajax event="select" update="@([id$=user_table])" listener="#{userController.showUsersTable}" />
                     <f:facet name="header">
                         #{msg.user_management}
@@ -30,30 +30,50 @@
             </h:form>
             <h:form id="search_form">
                 <p:growl id="message" showDetail="false" escape="false"/>
-                <p:panelGrid columns="2" style="margin-bottom:10px border: none" cellpadding="5">
-                    <p:inputText id="search_input" required="true" value="#{userController.searchText}" style="width: 320px"/>
-                    <p:commandButton id="search_button"  styleClass="" value="#{msg.search}" icon="ui-icon-search"
-                                     actionListener="#{userController.searchUser}" action="#{userController.showUsersTable('')}"
-                                      update=":user_form:user_table">
-                    </p:commandButton>
-                    <p:selectOneRadio id="console" value="#{userController.searchType}">
-                        <f:selectItem itemLabel="#{msg.first_name}" itemValue="firstName" />
-                        <f:selectItem itemLabel="#{msg.last_name}" itemValue="lastName" />
-                        <f:selectItem itemLabel="E-mail" itemValue="email" />
-                        <f:selectItem itemLabel="#{msg.birthday}" itemValue="birthday" />
-                    </p:selectOneRadio>
-                    <p:commandButton  styleClass="" value="#{msg.reset}"
-                                      actionListener="#{userController.outOfSearchMode}" action="#{userController.showUsersTable('')}"
-                                      update=":user_form:user_table :search_form:message search_input">
-                    </p:commandButton>
+                <p:panelGrid style="margin-bottom:10px border: none" cellpadding="5">
+                    <p:row>
+                        <p:column>
+                            <p:inputText id="search_input" required="true" value="#{userController.searchText}" style="width: 320px"/>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton id="search_button"  styleClass="" value="#{msg.search}" icon="ui-icon-search"
+                                             actionListener="#{userController.searchUser}" action="#{userController.showUsersTable('')}"
+                                             update=":user_form:user_table">
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                   <p:row >
+                       <p:column>
+                           <p:selectOneRadio id="console" value="#{userController.searchType}">
+                               <f:selectItem itemLabel="#{msg.first_name}" itemValue="firstName" />
+                               <f:selectItem itemLabel="#{msg.last_name}" itemValue="lastName" />
+                               <f:selectItem itemLabel="E-mail" itemValue="email" />
+                               <f:selectItem itemLabel="#{msg.birthday}" itemValue="birthday" />
+                           </p:selectOneRadio>
+                       </p:column>
+                       <p:column>
+                           <p:commandButton  styleClass="" value="#{msg.reset}"
+                                             actionListener="#{userController.outOfSearchMode}" action="#{userController.showUsersTable('')}"
+                                             update=":user_form:user_table :search_form:message search_input">
+                           </p:commandButton>
+                       </p:column>
+                   </p:row>
+
+
+
                 </p:panelGrid>
             </h:form>
-
+            <h:form id="session_form">
+                <p:panelGrid>
+                    <h:outputText value="#{currentSession.sessionId}"/>
+                    <p:commandLink value="#{msg.log_out}" action="#{authentication.doLogout}"/>
+                </p:panelGrid>
+            </h:form>
 
         </div>
 
         <div class="content">
-            <h:form id="user_form">
+            <h:form id="user_form" >
                 <p:growl id="messages" showDetail="false" escape="false"/>
 
                 <p:dataTable id="user_table" var="user" value="#{userController.users}" selectionMode="single"
@@ -102,10 +122,16 @@
                 </p:dataTable>
 
 
-                <p:commandButton styleClass="table_button" value="#{msg.new_user}"  icon="ui-icon-plus"
-                                 action="#{userController.addUserDialog}">
-                    <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('new')}" update=":user_form:user_table messages"/>
-                </p:commandButton>
+                <div>
+
+                <h:form style="float: left">
+                    <p:commandButton styleClass="table_button" value="#{msg.new_user}"  icon="ui-icon-plus"
+                                     action="#{userController.addUserDialog}">
+                        <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('new')}" update=":user_form:user_table :user_form:messages"/>
+                    </p:commandButton>
+                </h:form>
+
+
                 <p:commandButton styleClass="table_button" value="#{msg.edit}"  icon="ui-icon-pencil"
                                  action="#{userController.editUserDialog}">
                     <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('update')}" update=":user_form:user_table messages"/>
@@ -123,7 +149,7 @@
                         <p:commandButton value="#{msg.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
-
+                </div>
             </h:form>
 
             <h:form id="address_panel" >
@@ -132,18 +158,48 @@
                         #{msg.address}
                     </f:facet>
 
-
-                    <h:outputText value="ZIP" />
-                    <h:outputText value="#{addressController.address.zip}" style="width: 100px"/>
-                    <h:outputText value="#{msg.country}" />
-                    <h:outputText value="#{addressController.address.country}" />
-                    <h:outputText value="#{msg.city}" />
-                    <h:outputText value="#{addressController.address.city}" />
-                    <h:outputText value="#{msg.district}" />
-                    <h:outputText value="#{addressController.address.district}" />
-                    <h:outputText value="#{msg.street}" />
-                    <h:outputText value="#{addressController.address.street}" />
-
+                    <p:panelGrid>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="ZIP" />
+                            </p:column>
+                            <p:column style="width: 120px">
+                                <h:outputText value="#{addressController.address.zip}"/>
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="#{msg.country}" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{addressController.address.country}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="#{msg.city}" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{addressController.address.city}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="#{msg.district}" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{addressController.address.district}" />
+                            </p:column>
+                        </p:row>
+                        <p:row>
+                            <p:column>
+                                <h:outputText value="#{msg.street}" />
+                            </p:column>
+                            <p:column>
+                                <h:outputText value="#{addressController.address.street}" />
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
 
                 </p:panelGrid>
                 <p:commandButton styleClass="table_button" value="#{msg.edit}"  icon="ui-icon-pencil"

@@ -7,10 +7,8 @@ import javax.annotation.PostConstruct;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
-/**
- * Created by Сергей on 26.08.2015.
- */
-@Deprecated
+
+
 @Service
 @Scope("session")
 public class CurrentSession {

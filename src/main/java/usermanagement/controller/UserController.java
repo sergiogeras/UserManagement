@@ -100,8 +100,9 @@ public class UserController {
         addressController.createPanel(selectedUser.getAddress().getId());
     }
 
+
     public void addUserDialog(){
-        RequestContext.getCurrentInstance().openDialog("pages/addUser", props, null);
+        RequestContext.getCurrentInstance().openDialog("addUser", props, null);
     }
 
 
@@ -119,7 +120,7 @@ public class UserController {
         if(selectedUser!=null){
             user=selectedUser;
             setGroupType(user.getGroup().getId());
-            RequestContext.getCurrentInstance().openDialog("pages/editUser", props, null);
+            RequestContext.getCurrentInstance().openDialog("editUser", props, null);
         }
     }
 
@@ -147,7 +148,6 @@ public class UserController {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(bundle.getString("deleted_user")));
             }
         }
-
     }
 
     public void searchUser(){
