@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:sec="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/security
        http://www.springframework.org/schema/security/spring-security.xsd">
 
 
-       <security:http auto-config="true" use-expressions="true">
+       <sec:http  use-expressions="true">
 
-              <security:csrf disabled="true"/>
-
-              <security:intercept-url pattern="/pages/*" access="isAuthenticated()"/>
-              <security:form-login login-processing-url="/j_spring_security_check" default-target-url="/manager.xhtml"
-                                   login-page="/login/login.xhtml" authentication-failure-url="/login/loginFailed.xhtml"
+           
+              <sec:intercept-url pattern="/pages/*" access="isAuthenticated()"/>
+              <sec:intercept-url pattern="/javax.faces.resource/**" access="permitAll"/>
+              <sec:form-login login-processing-url="/j_spring_security_check" default-target-url="/pages/manager.xhtml"
+                                   login-page="/login.xhtml" authentication-failure-url="/loginFailed.xhtml"
                       username-parameter="user" password-parameter="pass"/>
-              <security:logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/login/login.xhtml"/>
-       </security:http>
+              <sec:logout invalidate-session="true" logout-url="/j_spring_security_logout" logout-success-url="/login.xhtml"/>
+       </sec:http>
 
-       <!--<security:authentication-manager>-->
-              <!--<security:authentication-provider>-->
-                     <!--<security:jdbc-user-service data-source-ref="dataSource"/>-->
-
-              <!--</security:authentication-provider>-->
-       <!--</security:authentication-manager>-->
-
-       <security:authentication-manager alias="authenticationManager">
-              <security:authentication-provider>
-                     <security:user-service>
-                            <security:user name="admin" password="admin" authorities="ROLE_ADMIN"/>
-                            <security:user name="user" password="user" authorities="ROLE_USER"/>
-                     </security:user-service>
-              </security:authentication-provider>
-       </security:authentication-manager>
+       <sec:authentication-manager alias="authenticationManager">
+              <sec:authentication-provider>
+                     <sec:user-service>
+                            <sec:user name="admin" password="admin" authorities="ROLE_ADMIN"/>
+                            <sec:user name="user" password="user" authorities="ROLE_USER"/>
+                     </sec:user-service>
+              </sec:authentication-provider>
+       </sec:authentication-manager>
 </beans>

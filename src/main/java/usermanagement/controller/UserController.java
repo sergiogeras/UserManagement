@@ -36,13 +36,13 @@ public class UserController {
     private UserSearch userSearch;
 
     private List<User> users;
-    private List<User> foundedUsers; //список найденных пользователей
+    private List<User> foundedUsers; //founded users after search
 
     private User user;
     private Group group;
     private TreeNode selectedNode;
 
-    private User selectedUser; //выбранная строка в таблице
+    private User selectedUser; //selected row in user table
     private int groupType;
     private String searchText;
     private String searchType;
@@ -50,7 +50,7 @@ public class UserController {
 
 
     ResourceBundle bundle;
-    Map<String, Object> props; // настройки диалогов
+    Map<String, Object> props; // options for dialog framework
 
     @PostConstruct
     public void init(){
@@ -140,7 +140,7 @@ public class UserController {
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(bundle.getString("deleted_user")));
             }
         }
-        //удаление пользователя в режиме поиска
+        //deleting user in search mode
         if(isSearchMode){
             if (selectedUser != null) {
                 foundedUsers.remove(selectedUser);
