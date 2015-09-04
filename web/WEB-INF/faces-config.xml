@@ -30,15 +30,15 @@
     </application>
 
     <navigation-rule>
-        <from-view-id>/login/login.xhtml</from-view-id>
+        <from-view-id>/login.xhtml/login.xhtml</from-view-id>
         <navigation-case>
-            <to-view-id>/manager.xhtml</to-view-id>
+            <to-view-id>/pages/manager.xhtml</to-view-id>
             <from-outcome>manager</from-outcome>
             <redirect/>
         </navigation-case>
     </navigation-rule>
     <navigation-rule>
-        <from-view-id>/manager.xhtml</from-view-id>
+        <from-view-id>/pages/manager.xhtml</from-view-id>
         <navigation-case>
             <to-view-id>/j_spring_security_logout?faces-redirect=true</to-view-id>
             <from-outcome>exit</from-outcome>

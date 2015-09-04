@@ -32,9 +32,6 @@ public class User implements Serializable{
     private Date birthday;
 
     @Column
-    private Boolean isActive;
-
-    @Column
     private Date createTS;
 
     @Column
@@ -53,14 +50,13 @@ public class User implements Serializable{
     }
 
     public User(String firstName, String lastName, String username, String password, String email,
-                Date birthday, Boolean isActive, Date createTS, Date lastUpdateTS) {
+                Date birthday, Date createTS, Date lastUpdateTS) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.email = email;
         this.birthday = birthday;
-        this.isActive = isActive;
         this.createTS = createTS;
         this.lastUpdateTS = lastUpdateTS;
     }
@@ -119,14 +115,6 @@ public class User implements Serializable{
 
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
     }
 
     public Date getCreateTS() {

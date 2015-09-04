@@ -60,8 +60,8 @@ public class UserController {
         setIsSearchMode(false);
         props=new HashMap<>();
         props.put("resizable", false);
-//        props.put("contentWidth", 380);
-//        props.put("contentHeight", 350);
+        props.put("contentWidth", 340);
+        props.put("contentHeight", 400);
     }
 
 

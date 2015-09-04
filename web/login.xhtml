@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+    <title>#{msg.authentication}</title>
+    <h:outputScript name="jquery/jquery.js" library="primefaces"/>
+    <h:outputStylesheet name="login-style.css" library="css"/>
+</h:head>
+
+<h:body>
+
+    <div class="login_div">
+        <h:form prependId="false" id="login_panel">
+            <p:panelGrid columns="2">
+                <f:facet name="header">
+                    <p:outputLabel value="#{msg.enter_credentials}"/>
+                </f:facet>
+
+            <p:panelGrid>
+                <p:row>
+                    <p:column>
+                        <h:outputLabel  value="#{msg.username}:"/>
+                    </p:column>
+                    <p:column>
+                        <h:inputText id="user" required="true"/>
+                    </p:column>
+                </p:row>
+               <p:row>
+                   <p:column>
+                       <h:outputLabel  value="#{msg.password}:"/>
+                   </p:column>
+                   <p:column>
+                       <h:inputText id="pass"  required="true"/>
+                   </p:column>
+               </p:row>
+               <p:row>
+                   <p:column/>
+                   <p:column style="text-align: right">
+                       <p:commandButton value="#{msg.log_in}!" action="#{authentication.doLogin}" ajax="false"/>
+                   </p:column>
+               </p:row>
+            </p:panelGrid>
+            </p:panelGrid>
+
+
+        </h:form>
+    </div>
+
+
+</h:body>
+
+</html>

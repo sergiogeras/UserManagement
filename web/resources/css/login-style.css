@@ -1,6 +1,11 @@
 .login_div{
+    padding-top: 100px;
     margin: auto;
     font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
     color: black;
     font-size: 13px;
+}
+#login_panel{
+    margin: auto;
+    width: 350px;
 }

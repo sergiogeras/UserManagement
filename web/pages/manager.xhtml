@@ -5,7 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://java.sun.com/jsf/html" xmlns:security="http://www.springframework.org/security/tags">
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:sec="http://www.springframework.org/security/tags">
 
 <h:head>
     <title>#{msg.user_management}</title>
@@ -18,7 +18,7 @@
         <div class="header">
             <h:form id="group_tree">
                 <p:tree id="group_table"  value="#{groupController.root}" var="group" selectionMode="single"
-                        selection="#{userController.selectedNode}" style="height: 75px">
+                        selection="#{userController.selectedNode}" style="height: 87px">
                     <p:ajax event="select" update="@([id$=user_table])" listener="#{userController.showUsersTable}" />
                     <f:facet name="header">
                         #{msg.user_management}
@@ -30,7 +30,7 @@
             </h:form>
             <h:form id="search_form">
                 <p:growl id="message" showDetail="false" escape="false"/>
-                <p:panelGrid style="margin-bottom:10px border: none" cellpadding="5">
+                <p:panelGrid style="margin-bottom:10px border: none; height: 89px" cellpadding="5">
                     <p:row>
                         <p:column>
                             <p:inputText id="search_input" required="true" value="#{userController.searchText}" style="width: 320px"/>
@@ -42,40 +42,51 @@
                             </p:commandButton>
                         </p:column>
                     </p:row>
-                   <p:row >
-                       <p:column>
-                           <p:selectOneRadio id="console" value="#{userController.searchType}">
-                               <f:selectItem itemLabel="#{msg.first_name}" itemValue="firstName" />
-                               <f:selectItem itemLabel="#{msg.last_name}" itemValue="lastName" />
-                               <f:selectItem itemLabel="E-mail" itemValue="email" />
-                               <f:selectItem itemLabel="#{msg.birthday}" itemValue="birthday" />
-                           </p:selectOneRadio>
-                       </p:column>
-                       <p:column>
-                           <p:commandButton  styleClass="" value="#{msg.reset}"
-                                             actionListener="#{userController.outOfSearchMode}" action="#{userController.showUsersTable('')}"
-                                             update=":user_form:user_table :search_form:message search_input">
-                           </p:commandButton>
-                       </p:column>
-                   </p:row>
-
-
-
+                    <p:row >
+                        <p:column>
+                            <p:selectOneRadio id="console" value="#{userController.searchType}">
+                                <f:selectItem itemLabel="#{msg.first_name}" itemValue="firstName" />
+                                <f:selectItem itemLabel="#{msg.last_name}" itemValue="lastName" />
+                                <f:selectItem itemLabel="E-mail" itemValue="email" />
+                                <f:selectItem itemLabel="#{msg.birthday}" itemValue="birthday" />
+                            </p:selectOneRadio>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton  styleClass="" value="#{msg.reset}"
+                                              actionListener="#{userController.outOfSearchMode}" action="#{userController.showUsersTable('')}"
+                                              update=":user_form:user_table :search_form:message search_input">
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
                 </p:panelGrid>
             </h:form>
-            <h:form id="session_form">
+            <h:form id="session_form" >
+                <p:panelGrid columns="2">
+                <f:facet name="header">
+                    #{msg.session_data}
+                </f:facet>
                 <p:panelGrid>
-                    <h:outputText value="#{currentSession.sessionId}"/>
-                    <p:commandLink value="#{msg.log_out}" action="#{authentication.doLogout}"/>
+                    <p:row>
+                        <p:column colspan="2">
+                            <h:outputText value="№: "/>
+                            <h:outputText value="#{currentSession.sessionId}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2">
+                            <h:outputText value="#{msg.username}: "/>
+                            <h:outputLabel value="#{currentSession.currentUser}"/>
+                            <p:commandLink value="#{msg.log_out}" action="#{authentication.doLogout}" style="float: right"/>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
                 </p:panelGrid>
             </h:form>
-
         </div>
 
         <div class="content">
             <h:form id="user_form" >
                 <p:growl id="messages" showDetail="false" escape="false"/>
-
                 <p:dataTable id="user_table" var="user" value="#{userController.users}" selectionMode="single"
                              selection="#{userController.selectedUser}" rowKey="#{user.id}" emptyMessage="#{msg.choose_group_of_users}">
                     <f:facet name="header">
@@ -106,9 +117,6 @@
                             <f:convertDateTime pattern="dd.MM.yyyy"/>
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msg.is_active}">
-                        <h:outputText value="#{user.isActive}" />
-                    </p:column>
                     <p:column headerText="#{msg.create_ts}">
                         <h:outputText value="#{user.createTS}">
                            <f:convertDateTime pattern="HH:mm dd.MM.yyyy" />
@@ -120,17 +128,11 @@
                         </h:outputText>
                     </p:column>
                 </p:dataTable>
-
-
-                <div>
-
-                <h:form style="float: left">
-                    <p:commandButton styleClass="table_button" value="#{msg.new_user}"  icon="ui-icon-plus"
-                                     action="#{userController.addUserDialog}">
-                        <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('new')}" update=":user_form:user_table :user_form:messages"/>
-                    </p:commandButton>
-                </h:form>
-
+                <sec:authorize access="hasRole('Admin')">
+                <p:commandButton styleClass="table_button" value="#{msg.new_user}"  icon="ui-icon-plus"
+                                 action="#{userController.addUserDialog}">
+                    <p:ajax event="dialogReturn" listener="#{userController.showUsersTable('new')}" update=":user_form:user_table messages"/>
+                </p:commandButton>
 
                 <p:commandButton styleClass="table_button" value="#{msg.edit}"  icon="ui-icon-pencil"
                                  action="#{userController.editUserDialog}">
@@ -140,7 +142,6 @@
                     <p:commandButton styleClass="table_button" value="#{msg.delete}" icon="ui-icon-trash"
                                      actionListener="#{userController.deleteUser}" update="@([id$=messages]) :user_form:user_table" action="#{userController.showUsersTable('')}" >
                         <p:confirm message="#{msg.delete}?" header="#{msg.confirmation}" icon="ui-icon-alert"/>
-
                     </p:commandButton>
                     <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
                         <p:commandButton value="#{msg.yes}" type="button" styleClass="ui-confirmdialog-yes"
@@ -149,7 +150,7 @@
                         <p:commandButton value="#{msg.no}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
                     </p:confirmDialog>
                 </h:form>
-                </div>
+                </sec:authorize>
             </h:form>
 
             <h:form id="address_panel" >
@@ -157,7 +158,6 @@
                     <f:facet name="header">
                         #{msg.address}
                     </f:facet>
-
                     <p:panelGrid>
                         <p:row>
                             <p:column>
@@ -202,13 +202,14 @@
                     </p:panelGrid>
 
                 </p:panelGrid>
+                <sec:authorize access="hasRole('Admin')">
                 <p:commandButton styleClass="table_button" value="#{msg.edit}"  icon="ui-icon-pencil"
                                  action="#{addressController.editAddressDialog}">
                     <p:ajax event="dialogReturn" listener="#{userController.showAddressPanel}" update=":address_panel:pg"/>
                 </p:commandButton>
+                </sec:authorize>
             </h:form>
         </div>
-
     </div>
 </h:body>
 

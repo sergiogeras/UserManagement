@@ -38,7 +38,7 @@ public class UserServiceTest {
     @Test
     public void addUser(){
         User user=new User("Name", "LastName", "Username", "Pass",
-                "mail@mail.com", new Date(), true, new Date(), new Date());
+                "mail@mail.com", new Date(), new Date(), new Date());
         List<Group> allGroups= groupService.getAllGroups();
         //int exampleId=allGroups.get(allGroups.size()-1).getId();
         int exampleId=allGroups.get((int) (Math.random()*allGroups.size()-1)).getId();
